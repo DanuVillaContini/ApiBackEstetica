@@ -3,13 +3,16 @@ const cors = require("cors");
 const db = require("./src/DataBase");
 
 const app = express();
+require("dotenv").config()
+
 
 app.use(cors())
 app.use(express.json())
+const port = process.env.PORT
 
-// mongoose.connect()
-app.listen(4000, () =>{
-    console.log("Server levantado en puerto 4000")
+
+app.listen(port, () =>{
+    console.log("Server levantado en puerto "+port)
     db()
 })
 
