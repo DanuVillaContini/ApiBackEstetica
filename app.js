@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const db = require("./src/DataBase");
 const usuarioRouter = require("./src/Routes/usuario.route");
+const servicioRouter = require("./src/Routes/servicio.route");
 
 const app = express();
 require("dotenv").config()
@@ -14,6 +15,8 @@ const port = process.env.PORT
 
 app.use(express.json({ limit: "50mb" }))
 app.use("/usuario", usuarioRouter)
+app.use("/servicio", servicioRouter)
+
 
 app.listen(port, () =>{
     console.log("Server levantado en puerto "+port)
