@@ -1,19 +1,20 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+
 const turnosSchema = mongoose.Schema(
     {
         dia_disponible: {
             type: Number,
-            require: true,
+            required: true,
             trim: true,
-            minLenght: 1,
-            maxLenght: 2
+            minLength: 1,
+            maxLength: 2, 
         },
         mes_disponible: {
             type: Number,
-            require: true,
+            required: true,
             trim: true,
-            minLenght: 1,
-            maxLenght: 2
+            minLength: 1,
+            maxLength: 2,
         },
         hora_disponible: {
             type: Number,
@@ -26,8 +27,13 @@ const turnosSchema = mongoose.Schema(
             required: true,
             min: 0,
             max: 59
+        },
+        disponible: {
+            type: Boolean,
+            default: true
         }
     }
-)
+);
+
 const Turnos = mongoose.model('Turnos', turnosSchema);
 module.exports = Turnos;

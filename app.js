@@ -5,6 +5,7 @@ const db = require("./src/DataBase");
 const usuarioRouter = require("./src/Routes/usuario.route");
 const servicioRouter = require("./src/Routes/servicio.route");
 const turnosRouter = require("./src/Routes/turno.route");
+const reservaRouter = require("./src/Routes/reservas.route");
 
 const app = express();
 require("dotenv").config()
@@ -18,6 +19,8 @@ app.use(express.json({ limit: "50mb" }))
 app.use("/usuario", usuarioRouter)
 app.use("/servicio", servicioRouter)
 app.use("/disponer-turno", turnosRouter)
+app.use("/reservas", reservaRouter)
+
 
 
 

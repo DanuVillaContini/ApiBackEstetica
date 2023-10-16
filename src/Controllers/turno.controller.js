@@ -32,23 +32,30 @@ const mostrarTurnos = async (req, res) => {
 }
 const actualizarTurno = async (req, res) => {
     try {
-        const turnos = await Turnos.findById(req.params.id);
-        if (turnos === null) {
+        const turno = await Turnos.findById(req.params.id);
+        if (turno === null) {
             res.status(404);
             return res.json({ message: "Turno no encontrado" });
         }
-        await Turnos.findByIdAndUpdate(req.params.id, {
-            dia_disponible: req.body.dia_disponible,
-            mes_disponible: req.body.mes_disponible,
-            hora_disponible: req.body.hora_disponible,
-            minute_disponible: req.body.minute_disponible,
-        });
+
+        if (req.body.hasOwnProperty('disponible')) {
+            turno.disponible = req.body.disponible;
+        }
+
+        turno.dia_disponible = req.body.dia_disponible;
+        turno.mes_disponible = req.body.mes_disponible;
+        turno.hora_disponible = req.body.hora_disponible;
+        turno.minute_disponible = req.body.minute_disponible;
+
+        await turno.save();
+
         res.json({ message: "Turno actualizado" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Ha ocurrido un error en el servidor" });
     }
 };
+
 const eliminarTurno = async (req, res) => {
     try {
         const turno = await Turnos.findById(req.params.id);
