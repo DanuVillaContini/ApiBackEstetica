@@ -8,20 +8,39 @@ const createTurno = async (req, res) => {
             hora_disponible,
             minute_disponible,
         } = req.body;
+
+        // Obtiene la fecha actual
+        const fechaActual = new Date();
+        const diaActual = fechaActual.getDate();
+        const mesActual = fechaActual.getMonth() + 1; // Los meses comienzan desde 0
+        const horaActual = fechaActual.getHours();
+        const minutoActual = fechaActual.getMinutes();
+
+        // Compara la fecha actual con la fecha proporcionada
+        if (
+            mes_disponible < mesActual ||
+            (mes_disponible === mesActual && dia_disponible < diaActual) ||
+            (mes_disponible === mesActual && dia_disponible === diaActual && hora_disponible < horaActual) ||
+            (mes_disponible === mesActual && dia_disponible === diaActual && hora_disponible === horaActual && minute_disponible < minutoActual)
+        ) {
+            return res.status(400).json({ message: "No puedes crear un turno en una fecha pasada" });
+        }
+
         const turno = new Turnos({
             dia_disponible,
             mes_disponible,
             hora_disponible,
             minute_disponible,
-        })
+        });
+
         await turno.save();
-        res.status(201)
-        res.json({ message: "Nuevo Turno disponible registrado con exito" })
+        res.status(201).json({ message: "Nuevo Turno disponible registrado con éxito" });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "No se ha podido registrar el turno" })
+        res.status(500).json({ message: "No se ha podido registrar el turno" });
     }
 }
+
 const mostrarTurnos = async (req, res) => {
     try {
         const turnos = await Turnos.find();
