@@ -1,5 +1,6 @@
 const Reserva = require('../Models/reservas.model');
 const Turnos = require('../Models/turno.model');
+const Usuario = require('../Models/usuario.model')
 
 const crearReserva = async (req, res) => {
     try {
@@ -11,7 +12,12 @@ const crearReserva = async (req, res) => {
             return res.status(400).json({ message: 'El turno no está disponible' });
         }
 
-        // Crear la reserva
+        const cliente = await Usuario.findById(clienteId);
+        if (!cliente) { // Corrección: Verificar si el cliente no existe
+            return res.status(400).json({ message: 'Usuario que se registra, no encontrado' });
+        }
+
+        // Crear la reserva con el cliente
         const reserva = new Reserva({
             turno: turnoId,
             cliente: clienteId,
@@ -29,35 +35,24 @@ const crearReserva = async (req, res) => {
         res.status(500).json({ message: 'Error al crear la reserva' });
     }
 };
+
 const mostrarReservas = async (req, res) => {
     try {
-        const reservas = await Reserva.find().populate('turno cliente');
+        const reservas = await Reserva.find().populate('turno');
+
         res.status(200).json(reservas);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error al recuperar las reservas' });
+        res.status(500).json({ message: 'Error al obtener las reservas' });
     }
 };
-const actualizarReserva = async (req, res) => {
-    try {
-        const reservaId = req.params.id;
-        const nuevosDatos = req.body;
 
-        // Verificar si la reserva existe y si el cliente tiene permiso para actualizarla
 
-        await Reserva.findByIdAndUpdate(reservaId, nuevosDatos);
 
-        res.json({ message: 'Reserva actualizada con éxito' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error al actualizar la reserva' });
-    }
-};
 const cancelarReserva = async (req, res) => {
     try {
         const reservaId = req.params.id;
 
-        // Obtener la reserva y el turno asociado
         const reserva = await Reserva.findById(reservaId);
         if (!reserva) {
             return res.status(404).json({ message: 'Reserva no encontrada' });
@@ -65,7 +60,7 @@ const cancelarReserva = async (req, res) => {
 
         const turno = await Turnos.findById(reserva.turno);
         if (turno) {
-            turno.disponible = true; // Actualizar la disponibilidad del turno a true
+            turno.disponible = true; 
             await turno.save();
         }
 
@@ -78,21 +73,11 @@ const cancelarReserva = async (req, res) => {
     }
 };
 
-// const historialReservas = async (req, res) => {
-//     try {
-//         // Buscar todas las reservas sin restricción por cliente
-//         const reservas = await Reserva.find().populate('turno');
-        
-//         res.status(200).json(reservas);
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: 'Error al obtener el historial de reservas' });
-//     }
-// };
+
 
 module.exports = {
     crearReserva,
     mostrarReservas,
-    actualizarReserva,
+    // actualizarReserva,
     cancelarReserva,
 }

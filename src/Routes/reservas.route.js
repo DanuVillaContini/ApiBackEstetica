@@ -4,14 +4,11 @@ const { expressValidations } = require("../Middleware/common.validation")
 const {
     crearReserva,
     mostrarReservas,
-    actualizarReserva,
     cancelarReserva,
-    // historialReservas
 } = require('../Controllers/reservas.controller');
 
 const reservaRouter = Router();
 
-// Ruta para crear una reserva
 reservaRouter.post(
     '/crear-reserva',
     [
@@ -23,21 +20,8 @@ reservaRouter.post(
     crearReserva
 );
 
-// Ruta para mostrar todas las reservas
 reservaRouter.get('/mostrar-reservas', mostrarReservas);
 
-// Ruta para actualizar una reserva
-reservaRouter.put(
-    '/actualizar-reserva/:id',
-    [
-        param('id', 'ID de reserva inválido').isMongoId(),
-        body('otrosDetalles').optional(),
-    ],
-    expressValidations,
-    actualizarReserva
-);
-
-// // Ruta para cancelar una reserva
 reservaRouter.delete(
     '/cancelar-reserva/:id',
     [
@@ -47,6 +31,5 @@ reservaRouter.delete(
     cancelarReserva
 );
 
-// reservaRouter.get('/historial-reservas', expressValidations, historialReservas);
 
 module.exports = reservaRouter;

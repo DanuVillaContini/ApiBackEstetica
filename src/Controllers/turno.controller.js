@@ -30,6 +30,24 @@ const mostrarTurnos = async (req, res) => {
         res.status(500).json({ mensaje: 'Error al recuperar los turnos', error: error.message });
     }
 }
+
+const mostrarTurnoPorId = async (req, res) => {
+    try {
+        const turno = await Turnos.findById(req.params.id);
+        if (turno === null) {
+            res.status(404);
+            return res.json({ message: "Turno no encontrado" });
+        }
+
+        res.status(200).json(turno);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Ha ocurrido un error en el servidor" });
+    }
+};
+
+module.exports = { mostrarTurnoPorId };
+
 const actualizarTurno = async (req, res) => {
     try {
         const turno = await Turnos.findById(req.params.id);
@@ -76,4 +94,4 @@ const eliminarTurno = async (req, res) => {
 
 
 
-module.exports = {createTurno, mostrarTurnos, actualizarTurno, eliminarTurno};
+module.exports = {createTurno, mostrarTurnos, actualizarTurno, eliminarTurno, mostrarTurnoPorId};

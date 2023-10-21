@@ -1,7 +1,7 @@
 const { Router } = require("express")
 const { expressValidations } = require("../Middleware/common.validation")
 const { check, param, body } = require("express-validator")
-const { createTurno, eliminarTurno, actualizarTurno, mostrarTurnos } = require("../Controllers/turno.controller")
+const { createTurno, eliminarTurno, actualizarTurno, mostrarTurnos, mostrarTurnoPorId } = require("../Controllers/turno.controller")
 
 const turnosRouter = Router()
 
@@ -15,7 +15,13 @@ turnosRouter.post('/crear-turno',
     expressValidations, createTurno);
 
 turnosRouter.get('/mostrar-turnos', mostrarTurnos);
-
+turnosRouter.get('/mostrar-turno/:id',
+    [
+        param('id', 'ID de turno inválido').isMongoId(),
+    ],
+    expressValidations,
+    mostrarTurnoPorId
+);
 turnosRouter.put('/actualizar-turno/:id',
     [
         param('id').isMongoId().withMessage('Debe mandar un ID válido'),
