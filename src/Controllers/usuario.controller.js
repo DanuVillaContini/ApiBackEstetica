@@ -111,6 +111,10 @@ const actualizarUsuario = async (req, res) => {
             res.status(404);
             return res.json({ message: "Usuario no encontrado" });
         }
+        if (usuario.correo === "superuser@example.com") {
+            res.status(403);
+            return res.json({ message: "No se permite actualizar al superusuario" });
+        }
         await Usuario.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
             apellido: req.body.apellido,
@@ -118,6 +122,7 @@ const actualizarUsuario = async (req, res) => {
             // correo: req.body.correo,
             dni: req.body.dni
         });
+
         res.json({ message: "Usuario actualizado" });
     } catch (error) {
         console.error(error);
@@ -130,6 +135,10 @@ const eliminarUsuario = async (req, res) => {
         if (usuario === null) {
             res.status(404);
             return res.json({ message: "Usuario no encontrado" });
+        }
+        if (usuario.correo === "superuser@example.com") {
+            res.status(403);
+            return res.json({ message: "No se permite actualizar al superusuario" });
         }
         const filters = { _id: req.params.id };
         const deletedDocuments = await Usuario.deleteOne(filters);
