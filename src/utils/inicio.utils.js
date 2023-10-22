@@ -1,5 +1,5 @@
 
-const Personal = require("../models/personal.model");
+const Personal = require("../Models/usuario.model");
 const bcrypt = require('bcryptjs');
 
 const iniciarSuperUsuarioDB = async () => {
@@ -7,13 +7,13 @@ const iniciarSuperUsuarioDB = async () => {
         const collection = await Personal.find();
         if (collection.length > 0) return;
         var salt = bcrypt.genSaltSync(5);
-        var hashedPassword = bcrypt.hashSync("academy1234", salt);
+        var hashedPassword = bcrypt.hashSync("esteticaMAGNIFICAT", salt);
         const superUsuario = new Personal({
-            nameUser: "superuser",
-            lastnameUser: "Super",
+            name: "superuser",
+            apellido: "Super",
             telefono: "123456789",
             correo: "superuser@example.com",
-            dniUser: "1",
+            dni: "11111111",
             isAdmin: true,
             pass: hashedPassword
         });
@@ -23,5 +23,5 @@ const iniciarSuperUsuarioDB = async () => {
     }
 };
 module.exports = {
-    iniciarSuperUsuarioDB, iniciarInstitutoDB
+    iniciarSuperUsuarioDB
 }
